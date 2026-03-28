@@ -3,7 +3,7 @@ backend/.env
 frontend/.env
 frontend/.env.local
 frontend/.env.development.local
-frontend/.env.production.local
+ 
 
 # Build and dependency directories
 backend/target/
@@ -11,14 +11,14 @@ frontend/dist/
 frontend/node_modules/
 node_modules/
 
-.env
+
 *.log
 .DS_Store
 .idea/
 .vscode/
 *.iml
 *.class
-*.jar
+
 *.war
 *.ear
 *.db
