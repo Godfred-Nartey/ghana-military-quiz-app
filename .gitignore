@@ -1,17 +1,35 @@
-# Editor files
-.vscode/
-
 # Environment files
-backend/.env*
-frontend/.env*
-!backend/.env.example
-!frontend/.env.example
+backend/.env
+frontend/.env
+frontend/.env.local
+frontend/.env.development.local
+ 
 
 # Build and dependency directories
 backend/target/
 frontend/dist/
 frontend/node_modules/
+node_modules/
 
-# Local scratch and one-off setup files
-query
+
+*.log
+.DS_Store
+.idea/
+.vscode/
+*.iml
+*.class
+
+*.war
+*.ear
+*.db
+*.sql
+*.sqlite
+*.bak
+*.backup
+*.swp
+*.swo
+*.tmp
+*.log
+
 admin_insert.sql
+query
