@@ -1,0 +1,17 @@
+# Editor files
+.vscode/
+
+# Environment files
+backend/.env*
+frontend/.env*
+!backend/.env.example
+!frontend/.env.example
+
+# Build and dependency directories
+backend/target/
+frontend/dist/
+frontend/node_modules/
+
+# Local scratch and one-off setup files
+query
+admin_insert.sql
