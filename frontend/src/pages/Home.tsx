@@ -38,11 +38,11 @@ function Home() {
     <div className="min-h-[80vh]">
       {/* Hero Section */}
       <section className="relative max-w-6xl mx-auto px-4 py-12 md:py-16">
-        <div className="absolute right-0 top-0 h-72 w-72 rounded-full bg-primary-200/50 blur-3xl" />
-        <div className="absolute bottom-0 left-0 h-64 w-64 rounded-full bg-secondary-200/50 blur-3xl" />
-        <div className="absolute right-1/4 bottom-0 h-48 w-48 rounded-full bg-primary-300/30 blur-3xl" />
+        <div className="pointer-events-none absolute right-0 top-0 h-72 w-72 rounded-full bg-primary-200/50 blur-3xl" />
+        <div className="pointer-events-none absolute bottom-0 left-0 h-64 w-64 rounded-full bg-secondary-200/50 blur-3xl" />
+        <div className="pointer-events-none absolute right-1/4 bottom-0 h-48 w-48 rounded-full bg-primary-300/30 blur-3xl" />
         <div className="grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr]">
-          <div className="text-center lg:text-left">
+          <div className="relative z-10 text-center lg:text-left">
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
               Test Your Knowledge of the{' '}
               <span className="text-gradient">Ghana Military</span>
@@ -71,9 +71,9 @@ function Home() {
           </div>
 
           <div className="relative flex items-center justify-center">
-            <div className="absolute -inset-16 rounded-full bg-primary-100/60 blur-3xl" />
-            <div className="absolute -inset-10 rounded-full bg-white/70 blur-2xl" />
-            <div className="absolute -inset-4 rounded-[3rem] bg-gradient-to-br from-primary-50/80 via-white/60 to-secondary-50/80 blur-xl" />
+            <div className="pointer-events-none absolute -inset-16 rounded-full bg-primary-100/60 blur-3xl" />
+            <div className="pointer-events-none absolute -inset-10 rounded-full bg-white/70 blur-2xl" />
+            <div className="pointer-events-none absolute -inset-4 rounded-[3rem] bg-gradient-to-br from-primary-50/80 via-white/60 to-secondary-50/80 blur-xl" />
 
             <div
               className="relative h-[340px] w-full overflow-hidden rounded-[2rem] shadow-2xl md:h-[460px]"

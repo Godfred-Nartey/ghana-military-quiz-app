@@ -7,14 +7,15 @@ import { Question, AnswerOption } from '../types';
 function Quiz() {
   const { categoryId } = useParams<{ categoryId: string }>();
   const navigate = useNavigate();
-  
+
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, AnswerOption>>({});
   const [timeRemaining, setTimeRemaining] = useState(0);
   const [attemptId, setAttemptId] = useState<number | null>(null);
   const [questionStartTime, setQuestionStartTime] = useState<number>(Date.now());
   const [questionTimes, setQuestionTimes] = useState<Record<number, number>>({});
-  const [quizStartTime] = useState<number>(Date.now()); // ← ADDED
+  const [quizStartTime] = useState<number>(Date.now());
+  const [isSubmittingQuiz, setIsSubmittingQuiz] = useState(false);
 
   const { data: category } = useQuery({
     queryKey: ['category', categoryId],
@@ -38,7 +39,7 @@ function Quiz() {
     if (categoryId && !attemptId && !startQuizMutation.isPending) {
       startQuizMutation.mutate();
     }
-  }, [categoryId]);
+  }, [categoryId, attemptId, startQuizMutation]);
 
   const { data: questions, isLoading: isLoadingQuestions } = useQuery({
     queryKey: ['quiz-questions', attemptId],
@@ -48,7 +49,7 @@ function Quiz() {
 
   useEffect(() => {
     if (!attemptId) return;
-    
+
     const timer = setInterval(() => {
       setTimeRemaining((prev) => {
         if (prev <= 1) {
@@ -74,9 +75,10 @@ function Quiz() {
   };
 
   const handleSubmitQuiz = async () => {
-    if (!attemptId) return;
-    
+    if (!attemptId || isSubmittingQuiz) return;
+
     try {
+      setIsSubmittingQuiz(true);
       const totalElapsed = Math.round((Date.now() - quizStartTime) / 1000);
       const answeredCount = Object.keys(answers).length || 1;
       const avgTimePerQuestion = Math.round(totalElapsed / answeredCount);
@@ -88,10 +90,15 @@ function Quiz() {
           timeSpent: questionTimes[Number(questionId)] || avgTimePerQuestion,
         });
       }
-      await quizApi.completeQuiz(attemptId); // ← ADDED
+
+      await quizApi.completeQuiz(attemptId);
       navigate(`/quiz/${attemptId}/results`);
     } catch (error) {
       console.error('Error submitting quiz:', error);
+      const message = error instanceof Error ? error.message : 'Please try again.';
+      alert(`Error submitting quiz: ${message}`);
+    } finally {
+      setIsSubmittingQuiz(false);
     }
   };
 
@@ -113,7 +120,6 @@ function Quiz() {
 
   return (
     <div className="max-w-3xl mx-auto">
-      {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">{category?.name}</h1>
@@ -126,7 +132,6 @@ function Quiz() {
         </div>
       </div>
 
-      {/* Progress Bar */}
       <div className="w-full bg-gray-200 rounded-full h-2 mb-8">
         <div
           className="bg-primary-600 h-2 rounded-full transition-all duration-300"
@@ -134,7 +139,6 @@ function Quiz() {
         ></div>
       </div>
 
-      {/* Question */}
       {currentQuestion && (
         <div className="card p-8">
           <h2 className="text-xl font-semibold text-gray-900 mb-6">
@@ -163,25 +167,29 @@ function Quiz() {
             ))}
           </div>
 
-          {/* Navigation */}
           <div className="flex justify-between mt-8 pt-6 border-t border-gray-200">
             <button
               onClick={() => setCurrentQuestionIndex((prev) => Math.max(0, prev - 1))}
-              disabled={currentQuestionIndex === 0}
-              className="btn-outline"
+              disabled={currentQuestionIndex === 0 || isSubmittingQuiz}
+              className="btn-outline disabled:cursor-not-allowed disabled:opacity-60"
             >
               Previous
             </button>
             {currentQuestionIndex < (questions?.length || 0) - 1 ? (
               <button
                 onClick={() => setCurrentQuestionIndex((prev) => prev + 1)}
-                className="btn-primary"
+                disabled={isSubmittingQuiz}
+                className="btn-primary disabled:cursor-not-allowed disabled:opacity-60"
               >
                 Next
               </button>
             ) : (
-              <button onClick={handleSubmitQuiz} className="btn-primary">
-                Submit Quiz
+              <button
+                onClick={handleSubmitQuiz}
+                disabled={isSubmittingQuiz}
+                className="btn-primary disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {isSubmittingQuiz ? 'Submitting...' : 'Submit Quiz'}
               </button>
             )}
           </div>

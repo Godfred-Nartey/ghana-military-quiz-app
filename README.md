@@ -210,6 +210,7 @@ Main API groups include:
 Additional project documentation is available here:
 
 - [docs/implementation-guide.md](./docs/implementation-guide.md)
+- [docs/deployment-guide.md](./docs/deployment-guide.md)
 - [plans/architecture-plan.md](./plans/architecture-plan.md)
 - [plans/api-endpoints.md](./plans/api-endpoints.md)
 - [plans/database-schema.md](./plans/database-schema.md)

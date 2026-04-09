@@ -1,5 +1,7 @@
+import { useEffect, useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './hooks/useAuth';
+import { warmUpServer } from './api/warmup';
 import Layout from './components/layout/Layout';
 import Home from './pages/Home';
 import About from './pages/About';
@@ -64,6 +66,37 @@ function AdminRoute({ children }: { children: React.ReactNode }) {
 }
 
 function App() {
+  const [isServerReady, setIsServerReady] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    warmUpServer()
+      .catch((error) => {
+        console.error('Server warmup failed:', error);
+      })
+      .finally(() => {
+        if (isMounted) {
+          setIsServerReady(true);
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  if (!isServerReady) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 px-6">
+        <div className="text-center">
+          <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-b-2 border-primary-600"></div>
+          <p className="text-sm font-medium text-gray-700">Connecting to server...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <Routes>
       {/* Public Routes */}
